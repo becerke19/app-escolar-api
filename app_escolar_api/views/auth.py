@@ -11,14 +11,12 @@ from rest_framework.response import Response
 class CustomAuthToken(ObtainAuthToken):
 
     def post(self, request, *args, **kwargs):
-        print("Login attempt received:", request.data)
-        try:
-            serializer = self.serializer_class(data=request.data,
-                                            context={'request': request})
+        serializer = self.serializer_class(data=request.data,
+                                        context={'request': request})
 
-            serializer.is_valid(raise_exception=True)
-            user = serializer.validated_data['user']
-            if user.is_active:
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        if user.is_active:
             # Obtener perfil y roles del usuario
             roles = user.groups.all()
             role_names = []
@@ -32,7 +30,7 @@ class CustomAuthToken(ObtainAuthToken):
             #Esta función genera la clave dinámica (token) para iniciar sesión
             token, created = Token.objects.get_or_create(user=user)
             
-           #Verificar que tipo de usuario quiere iniciar sesión
+            #Verificar que tipo de usuario quiere iniciar sesión
             
             if role_names == 'alumno':
                 alumno = Alumnos.objects.filter(user=user).first()
@@ -54,10 +52,6 @@ class CustomAuthToken(ObtainAuthToken):
             else:
                 return Response({"details":"Forbidden"},403)
                 pass
-            
-        except Exception as e:
-            print("Login error:", str(e))
-            return Response({"error": str(e)}, status=400)
             
         return Response({}, status=status.HTTP_403_FORBIDDEN) 
 
