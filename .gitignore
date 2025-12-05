@@ -57,3 +57,21 @@ sistema_fcc_api/migrations
 # Upload data
 /uploadData
 .DS_Store
+
+# Django specific
+*.sqlite3
+db.sqlite3
+*.pyc
+__pycache__/
+staticfiles/
+media/
+
+# Environment variables
+.env
+.env.local
+*.cnf
+
+# Virtual environment
+venv/
+env/
+ENV/
